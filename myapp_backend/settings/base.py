@@ -95,6 +95,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_PAGINATION_CLASS": "api.pagination.StandardResultsSetPagination",
     "PAGE_SIZE": 20,
+    "DEFAULT_THROTTLE_RATES": {
+        "login": "60/minute",
+        "register": "30/minute",
+        "password_reset": "10/minute",
+    },
 }
 
 SIMPLE_JWT = {
@@ -117,3 +122,21 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
+
+# Password reset emails / deep link base (iOS app or web)
+PASSWORD_RESET_FRONTEND_BASE_URL = config("PASSWORD_RESET_FRONTEND_BASE_URL", default="myapp://password-reset")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@example.com")
+
+# Optional: Sentry (set SENTRY_DSN in env for staging/production)
+SENTRY_DSN = config("SENTRY_DSN", default="")
+
+if SENTRY_DSN:
+    import sentry_sdk  # noqa: E402
+    from sentry_sdk.integrations.django import DjangoIntegration  # noqa: E402
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=0.1,
+        send_default_pii=False,
+    )

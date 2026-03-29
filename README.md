@@ -12,6 +12,11 @@ An AI assistant **cannot** create a GCP project, add **$300** credits, or link b
 - Keep **2FA** on the Google account; store keys in **Secret Manager**, not in chat or repos.
 - For **Vertex AI / Gemini**: enable APIs in the project you own; usage is billed per product terms — it is separate from “Claude” subscriptions unless you explicitly integrate them.
 
+## Deploy on Google Cloud
+
+See **[../docs/GCP_DJANGO_DEPLOYMENT.md](../docs/GCP_DJANGO_DEPLOYMENT.md)** for billing, Cloud SQL, Cloud Run, secrets, and CI/CD.  
+Optional workflow template: [`.github/workflows/deploy-cloudrun.yml.example`](.github/workflows/deploy-cloudrun.yml.example).
+
 ## Quick start (local)
 
 ```bash
@@ -63,6 +68,15 @@ celery -A myapp_backend worker -l info
 ```bash
 pytest
 ```
+
+## Implemented beyond Step 1.2
+
+- **User profile fields:** phone, DOB, profile image, `is_email_verified`, timestamps  
+- **Auth:** throttled login/register/refresh; **password reset** `POST /api/auth/password/reset/` + `.../confirm/`  
+- **Security:** Django password validators; optional **Sentry** via `SENTRY_DSN`  
+- **Docs:** `docs/API.md`  
+- **Docker:** `Dockerfile`  
+- **CI:** `.github/workflows/backend-ci.yml`  
 
 ## Agent approval prompt (Step 1.2)
 
